@@ -1,0 +1,2801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TradeDesk">
+<meta name="theme-color" content="#1C1C1E">
+<title>TradeDesk — Roofing Proposals in Seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & TOKENS ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #1C1C1E;
+  --bg2:       #2C2C2E;
+  --bg3:       #3A3A3C;
+  --surface:   #F5F4F0;
+  --orange:    #E8630A;
+  --orange2:   #FF7A1F;
+  --blue:      #3B5BDB;
+  --text:      #F5F4F0;
+  --text2:     #AEAEB2;
+  --text3:     #636366;
+  --border:    rgba(255,255,255,0.08);
+  --border2:   rgba(255,255,255,0.14);
+  --radius:    12px;
+  --shadow:    0 4px 24px rgba(0,0,0,0.4);
+}
+
+html { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+/* ── SCREENS ────────────────────────────────────────────────────── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── ONBOARDING ─────────────────────────────────────────────────── */
+#screen-onboarding,
+#screen-login,
+#screen-paywall {
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+  background: var(--bg);
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#screen-onboarding::before,
+#screen-login::before,
+#screen-paywall::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 900px; height: 700px;
+  background: radial-gradient(circle, rgba(232,99,10,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.onboard-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding: 56px 24px 80px;
+}
+
+.onboard-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Hero */
+.onboard-hero-section {
+  max-width: 640px;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.onboard-hero-section .brand {
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+/* Preview section */
+.onboard-preview-section {
+  max-width: 620px;
+  margin-bottom: 40px;
+}
+
+.preview-wrap { margin: 0 auto; }
+
+/* Transition / CTA strip */
+.onboard-transition {
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 48px;
+  padding: 28px 24px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.transition-text {
+  font-size: 17px;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.transition-sub {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 18px;
+}
+
+.transition-arrow {
+  display: flex;
+  justify-content: center;
+  color: var(--orange);
+  animation: bounceDown 1.8s infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* Form section */
+.onboard-form-section {
+  max-width: 440px;
+  width: 100%;
+}
+
+.onboard-inner {
+  max-width: 440px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SAMPLE PROPOSAL PREVIEW ──────────────────────────────────── */
+.preview-wrap {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+}
+
+.preview-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.preview-eyebrow-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: dotPulse 2s infinite;
+}
+
+@keyframes dotPulse {
+  0% { box-shadow: 0 0 0 0 rgba(232,99,10,0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(232,99,10,0); }
+  100% { box-shadow: 0 0 0 0 rgba(232,99,10,0); }
+}
+
+.preview-eyebrow-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.sample-doc {
+  background: white;
+  color: #1a1a1a;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  font-family: 'Inter', sans-serif;
+  transform: rotate(0.6deg);
+}
+
+.sample-header {
+  background: #1C1C1E;
+  padding: 22px 26px;
+}
+
+.sample-company-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.sample-company-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 15px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.sample-company-meta {
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
+  text-align: right;
+}
+
+.sample-badge {
+  background: #E8630A;
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.sample-job-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 19px;
+  color: white;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+.sample-body { padding: 22px 26px; }
+
+.sample-meta-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: #e5e5e5;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.sample-meta-cell {
+  background: #f8f8f8;
+  padding: 10px 12px;
+}
+
+.sample-meta-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 3px;
+}
+
+.sample-meta-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.sample-section-title {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #E8630A;
+  display: inline-block;
+}
+
+.sample-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.sample-table th {
+  text-align: left;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #999;
+  padding: 6px 8px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.sample-table th:last-child, .sample-table td:last-child { text-align: right; }
+
+.sample-table td {
+  padding: 9px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #2a2a2a;
+}
+
+.sample-line-desc { font-weight: 500; }
+.sample-line-note { font-size: 9px; color: #999; margin-top: 2px; }
+
+.sample-total-row td {
+  padding-top: 12px !important;
+  border-top: 2px solid #1C1C1E;
+  border-bottom: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1C1C1E !important;
+}
+
+/* Floating annotation badges */
+.float-badge {
+  position: absolute;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.float-badge .float-icon { font-size: 14px; }
+
+.float-badge.b1 { top: 30px; right: -16px; }
+.float-badge.b2 { bottom: 70px; left: -20px; }
+
+.float-time {
+  font-family: 'Archivo Black', sans-serif;
+  color: var(--orange);
+  font-size: 13px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 56px;
+}
+
+.brand-icon {
+  width: 40px; height: 40px;
+  background: var(--orange);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-icon svg { display: block; }
+
+.brand-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 21px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.onboard-hero {
+  margin-bottom: 0;
+}
+
+.onboard-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(32px, 7vw, 52px);
+  line-height: 1.18;
+  color: var(--text);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.onboard-title em {
+  color: var(--orange);
+  font-style: normal;
+}
+
+.onboard-sub {
+  font-size: 17px;
+  color: var(--text2);
+  line-height: 1.6;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.onboard-form { display: flex; flex-direction: column; gap: 14px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.field input, .field select {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  -webkit-appearance: none;
+}
+
+.field input:focus, .field select:focus {
+  border-color: var(--orange);
+}
+
+.field input::placeholder { color: var(--text3); }
+
+.field select option { background: var(--bg2); }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.rates-label {
+  font-size: 13px;
+  color: var(--text2);
+  margin: 8px 0 4px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.btn-primary:hover { background: var(--orange2); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.onboard-note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 16px;
+}
+
+.onboard-note a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.onboard-note a:hover { text-decoration: underline; }
+
+.form-error {
+  display: none;
+  background: rgba(232, 99, 10, 0.1);
+  border: 1px solid rgba(232, 99, 10, 0.3);
+  color: var(--orange2);
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+.form-error.show { display: block; }
+
+/* ── PRICING CARD ─────────────────────────────────────────────── */
+.pricing-card {
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+}
+
+.pricing-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.pricing-price {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 48px;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.pricing-period {
+  font-size: 16px;
+  color: var(--text3);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.pricing-features {
+  list-style: none;
+  text-align: left;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pricing-features li {
+  font-size: 14px;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-features li .icon {
+  color: var(--orange);
+  flex-shrink: 0;
+}
+
+/* ── APP SHELL ──────────────────────────────────────────────────── */
+#screen-app {
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.app-brand {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.app-brand-icon {
+  width: 30px; height: 30px;
+  background: var(--orange);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.app-brand-icon svg { display: block; }
+
+.app-brand-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.header-actions { display: flex; gap: 8px; align-items: center; }
+
+.btn-icon {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.btn-icon:hover { border-color: var(--orange); color: var(--orange); }
+
+/* ── MAIN LAYOUT ────────────────────────────────────────────────── */
+.app-body {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── LEFT PANEL ─────────────────────────────────────────────────── */
+.left-panel {
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.panel-sub {
+  font-size: 13px;
+  color: var(--text3);
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── VOICE INPUT ────────────────────────────────────────────────── */
+.voice-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+.voice-btn:hover { border-color: var(--orange); }
+.voice-btn.recording { border-color: var(--orange); background: rgba(232,99,10,0.1); }
+
+.voice-icon {
+  width: 36px; height: 36px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.voice-btn.recording .voice-icon {
+  animation: voicePulse 1s infinite;
+}
+
+@keyframes voicePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,99,10,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(232,99,10,0); }
+}
+
+.voice-text { text-align: left; }
+.voice-label { font-size: 14px; font-weight: 600; color: var(--text); }
+.voice-hint { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+/* ── DIVIDER ────────────────────────────────────────────────────── */
+.or-divider {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 12px; color: var(--text3); font-weight: 500;
+}
+.or-divider::before, .or-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ── JOB FORM ───────────────────────────────────────────────────── */
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.form-input, .form-textarea, .form-select {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  -webkit-appearance: none;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--orange);
+}
+
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+
+.form-textarea {
+  resize: none;
+  height: 100px;
+  line-height: 1.5;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.service-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 13px;
+  color: var(--text2);
+  font-family: 'Inter', sans-serif;
+}
+
+.service-chip:hover { border-color: var(--orange); color: var(--text); }
+.service-chip input { display: none; }
+.service-chip:has(input:checked) {
+  border-color: var(--orange);
+  background: rgba(232,99,10,0.1);
+  color: var(--orange);
+}
+
+/* ── GENERATE BTN ───────────────────────────────────────────────── */
+.panel-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.btn-generate {
+  width: 100%;
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-generate:hover { background: var(--orange2); transform: translateY(-1px); }
+.btn-generate:disabled { background: var(--bg3); color: var(--text3); cursor: not-allowed; transform: none; }
+
+/* ── RIGHT PANEL — PROPOSAL PREVIEW ────────────────────────────── */
+.right-panel {
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.preview-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.preview-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.preview-actions { display: flex; gap: 8px; }
+
+.btn-action {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.btn-action:hover { border-color: var(--orange); color: var(--orange); }
+.btn-action.primary { background: var(--orange); border-color: var(--orange); color: white; }
+.btn-action.primary:hover { background: var(--orange2); border-color: var(--orange2); color: white; }
+
+.preview-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── EMPTY STATE ────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 40px;
+  max-width: 400px;
+  margin: auto;
+}
+
+.empty-icon {
+  margin-bottom: 20px;
+  opacity: 0.25;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-icon svg { width: 52px; height: 52px; }
+
+/* ── ICON UTILITY ─────────────────────────────────────────────── */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+.icon svg { display: block; }
+.icon-sm svg { width: 14px; height: 14px; }
+.icon-md svg { width: 18px; height: 18px; }
+.icon-lg svg { width: 22px; height: 22px; }
+
+.empty-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 19px;
+  color: var(--text2);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.empty-sub {
+  font-size: 14px;
+  color: var(--text3);
+  line-height: 1.6;
+}
+
+/* ── GENERATING STATE ───────────────────────────────────────────── */
+.generating-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 60px;
+  margin: auto;
+}
+
+.gen-spinner {
+  width: 48px; height: 48px;
+  border: 3px solid var(--border2);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.gen-text {
+  font-size: 15px;
+  color: var(--text2);
+  text-align: center;
+}
+
+.gen-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text3);
+}
+
+.gen-step { display: flex; align-items: center; gap: 8px; }
+.gen-step.done { color: var(--orange); }
+
+/* ── PROPOSAL DOCUMENT ──────────────────────────────────────────── */
+.proposal-doc {
+  background: white;
+  color: #1a1a1a;
+  width: 100%;
+  max-width: 720px;
+  min-height: 900px;
+  box-shadow: var(--shadow);
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.proposal-header {
+  background: #1C1C1E;
+  padding: 36px 40px;
+  color: white;
+}
+
+.proposal-company {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.proposal-company-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 21px;
+  color: white;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.proposal-company-info {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  text-align: right;
+}
+
+.proposal-badge {
+  background: #E8630A;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.proposal-job-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 26px;
+  color: white;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.proposal-body { padding: 40px; }
+
+.proposal-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.proposal-meta-item {
+  background: #f8f8f8;
+  padding: 16px 20px;
+}
+
+.proposal-meta-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.proposal-meta-val {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.proposal-section {
+  margin-bottom: 36px;
+}
+
+.proposal-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #E8630A;
+  display: inline-block;
+}
+
+.proposal-intro {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.75;
+}
+
+/* Line items table */
+.line-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.line-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.line-table th:last-child, .line-table td:last-child { text-align: right; }
+
+.line-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #2a2a2a;
+  vertical-align: top;
+}
+
+.line-table tr:last-child td { border-bottom: none; }
+
+.line-desc { font-weight: 500; }
+.line-note { font-size: 12px; color: #888; margin-top: 3px; font-weight: 400; }
+
+.totals-table {
+  width: 100%;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.totals-table td {
+  padding: 8px 12px;
+  color: #444;
+}
+
+.totals-table td:last-child { text-align: right; }
+
+.total-row td {
+  padding-top: 16px !important;
+  border-top: 2px solid #1C1C1E;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C1C1E !important;
+}
+
+.proposal-notes {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.75;
+  background: #f8f8f8;
+  border-left: 3px solid #E8630A;
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+}
+
+.proposal-warranty {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.warranty-item {
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.warranty-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.warranty-sub { font-size: 13px; color: #666; }
+
+.proposal-footer {
+  background: #f8f8f8;
+  border-top: 1px solid #e5e5e5;
+  padding: 28px 40px;
+}
+
+.signature-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.sig-block { }
+.sig-line {
+  height: 1px;
+  background: #ccc;
+  margin: 40px 0 8px;
+}
+.sig-label { font-size: 12px; color: #888; }
+
+.proposal-cta {
+  background: #E8630A;
+  color: white;
+  padding: 32px 40px;
+  text-align: center;
+}
+
+.proposal-cta-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 19px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+}
+
+.proposal-cta-sub {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+.proposal-cta-contact {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ── TOAST ──────────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--orange);
+  color: var(--text);
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  z-index: 999;
+  transition: transform 0.3s ease;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── MOBILE ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app-body { grid-template-columns: 1fr; }
+
+  .left-panel { display: none; }
+  .left-panel.mobile-active {
+    display: flex;
+    position: fixed;
+    inset: 56px 0 0 0;
+    z-index: 50;
+    overflow-y: auto;
+  }
+
+  .right-panel { display: flex; }
+
+  .preview-body { padding: 16px; }
+  .proposal-doc { border-radius: 0; }
+  .proposal-header { padding: 24px; }
+  .proposal-body { padding: 24px; }
+  .proposal-meta { grid-template-columns: 1fr; }
+  .proposal-warranty { grid-template-columns: 1fr; }
+  .signature-area { grid-template-columns: 1fr; gap: 20px; }
+  .proposal-footer { padding: 24px; }
+  .proposal-cta { padding: 24px; }
+
+  .mobile-fab {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 56px; height: 56px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(232,99,10,0.4);
+    z-index: 40;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .mobile-fab:hover { transform: scale(1.05); }
+
+  /* ── ONBOARDING MOBILE ──────────────────────────────────────── */
+  .onboard-grid { padding: 40px 16px 60px; }
+
+  .preview-wrap { max-width: 100%; }
+
+  .sample-doc { transform: none; }
+
+  /* Float badges reposition for mobile so they don't overflow */
+  .float-badge.b1 {
+    top: -10px; right: 8px;
+    font-size: 11px;
+    padding: 8px 12px;
+  }
+  .float-badge.b2 {
+    bottom: -10px; left: 8px;
+    font-size: 11px;
+    padding: 8px 12px;
+  }
+
+  .onboard-title {
+    font-size: clamp(26px, 8vw, 36px);
+  }
+
+  .brand { margin-bottom: 28px; }
+  .onboard-hero-section { margin-bottom: 36px; }
+  .onboard-preview-section { margin-bottom: 32px; }
+  .onboard-transition { margin-bottom: 36px; padding: 22px 16px; }
+}
+
+@media (max-width: 480px) {
+  .sample-company-meta { display: none; }
+  .sample-meta-row { grid-template-columns: 1fr 1fr; }
+  .sample-meta-row .sample-meta-cell:nth-child(2) { display: none; }
+  .float-badge { white-space: normal; max-width: 70%; }
+  .float-badge.b1 { right: 0; }
+  .float-badge.b2 { left: 0; }
+}
+
+@media (min-width: 769px) {
+  .mobile-fab { display: none; }
+}
+
+/* ── MODAL ──────────────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 440px;
+  width: 100%;
+}
+
+.modal-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.modal-sub {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-reset-link {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  text-align: center;
+  padding: 14px 0 0;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.modal-reset-link:hover { color: var(--orange); }
+
+.btn-secondary {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  border-radius: 10px;
+  padding: 13px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-secondary:hover { border-color: var(--orange); color: var(--text); }
+
+.modal-input {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 12px 14px;
+  outline: none;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.modal-input:focus { border-color: var(--orange); }
+.modal-input::placeholder { color: var(--text3); }
+</style>
+</head>
+<body>
+
+<!-- ── ONBOARDING SCREEN ─────────────────────────────────────────── -->
+<div class="screen active" id="screen-onboarding">
+<div class="onboard-grid">
+
+  <!-- HERO SECTION -->
+  <div class="onboard-section onboard-hero-section">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 13L12 5L21 13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+          <path d="M6 13V20H18V13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+          <path d="M11 20V15H13V20" stroke="#1C1C1E" stroke-width="2.5" stroke-linecap="square"/>
+        </svg>
+      </div>
+      <div class="brand-name">TradeDesk</div>
+    </div>
+
+    <div class="onboard-hero">
+      <h1 class="onboard-title">
+        Win more jobs.<br>
+        Send the proposal <em>before they hang up.</em>
+      </h1>
+      <p class="onboard-sub">
+        Describe the job — TradeDesk builds a professional, priced proposal in under a minute.
+      </p>
+    </div>
+  </div>
+
+  <!-- SAMPLE PROPOSAL PREVIEW -->
+  <div class="onboard-section onboard-preview-section">
+    <div class="preview-wrap">
+      <div class="preview-eyebrow">
+        <div class="preview-eyebrow-dot"></div>
+        <div class="preview-eyebrow-text">What you send your client</div>
+      </div>
+
+      <div class="sample-doc">
+        <div class="sample-header">
+          <div class="sample-company-row">
+            <div>
+              <div class="sample-company-name">Smith Roofing & Repair</div>
+              <div style="font-size:9px;color:rgba(255,255,255,0.35);margin-top:3px;">License: ROC-118842</div>
+            </div>
+            <div class="sample-company-meta">
+              (555) 822-1190<br>
+              mike@smithroofing.com<br>
+              Mike Smith
+            </div>
+          </div>
+          <div class="sample-badge">Roofing Proposal</div>
+          <div class="sample-job-title">Storm Damage Roof Replacement</div>
+          <div style="margin-top:10px;font-size:10px;color:rgba(255,255,255,0.4);display:flex;gap:16px;">
+            <span>Proposal #TD-2026-0847</span>
+            <span>Issued: Jun 12, 2026</span>
+          </div>
+        </div>
+
+        <div class="sample-body">
+          <div class="sample-meta-row">
+            <div class="sample-meta-cell">
+              <div class="sample-meta-label">Prepared For</div>
+              <div class="sample-meta-val">Robert Daniels</div>
+            </div>
+            <div class="sample-meta-cell">
+              <div class="sample-meta-label">Property</div>
+              <div class="sample-meta-val" style="font-size:11px;">412 Birchwood Ln</div>
+            </div>
+            <div class="sample-meta-cell">
+              <div class="sample-meta-label">Total Investment</div>
+              <div class="sample-meta-val" style="color:#E8630A;font-size:15px;">$14,260.00</div>
+            </div>
+          </div>
+
+          <div class="sample-section-title">Scope of Work & Pricing</div>
+          <table class="sample-table">
+            <thead>
+              <tr><th>Description</th><th style="text-align:center;">Qty</th><th>Unit</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="sample-line-desc">Tear off existing shingles</div>
+                  <div class="sample-line-note">3 layers, full disposal included</div>
+                </td>
+                <td style="text-align:center;">28 sq</td>
+                <td style="text-align:right;">$45.00</td>
+                <td style="text-align:right;font-weight:600;">$1,260.00</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-line-desc">Architectural shingle install</div>
+                  <div class="sample-line-note">Matching neighborhood color profile</div>
+                </td>
+                <td style="text-align:center;">28 sq</td>
+                <td style="text-align:right;">$450.00</td>
+                <td style="text-align:right;font-weight:600;">$12,600.00</td>
+              </tr>
+              <tr class="sample-total-row">
+                <td colspan="3">Total</td>
+                <td>$14,260.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="float-badge b1">
+        <span class="icon icon-sm" style="color:var(--orange);"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14H11L10 22L20 9H13L13 2Z"/></svg></span>
+        <span>Generated in <span class="float-time">52 sec</span></span>
+      </div>
+      <div class="float-badge b2">
+        <span class="icon icon-sm" style="color:var(--orange);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10V11C5 14.866 8.134 18 12 18C15.866 18 19 14.866 19 11V10"/><path d="M12 18V22"/><path d="M8 22H16"/></svg></span>
+        <span>From a 15-second voice note</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSITION -->
+  <div class="onboard-transition">
+    <div class="transition-text">That proposal took 52 seconds to build.</div>
+    <div class="transition-sub">Set up your account below and start sending these to your own clients.</div>
+    <div class="transition-arrow">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5V19M5 12L12 19L19 12"/></svg>
+    </div>
+  </div>
+
+  <!-- SIGNUP FORM -->
+  <div class="onboard-section onboard-form-section">
+    <div class="onboard-inner">
+      <div class="onboard-form" id="onboardForm">
+        <div class="field">
+          <label>Your Company Name</label>
+          <input type="text" id="companyName" placeholder="e.g. Smith Roofing & Repair" autocomplete="organization">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Your Name</label>
+            <input type="text" id="ownerName" placeholder="John Smith" autocomplete="name">
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input type="tel" id="phone" placeholder="(555) 000-0000" autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="john@smithroofing.com" autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="At least 8 characters" autocomplete="new-password">
+        </div>
+
+        <div class="field">
+          <label>License Number (optional)</label>
+          <input type="text" id="license" placeholder="e.g. ROC-123456">
+        </div>
+
+        <div class="rates-label">Your Base Rates (used to calculate pricing)</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Price per Square ($)</label>
+            <input type="number" id="ratePerSquare" placeholder="450" value="450">
+          </div>
+          <div class="field">
+            <label>Labor Rate/hr ($)</label>
+            <input type="number" id="rateLabor" placeholder="85" value="85">
+          </div>
+        </div>
+
+        <div class="form-error" id="signupError"></div>
+
+        <button class="btn-primary" id="signupBtn" onclick="completeOnboarding()">
+          Create Account →
+        </button>
+
+        <p class="onboard-note">By creating an account, you agree to our <a href="terms.html" target="_blank">Terms & Privacy Policy</a>.</p>
+        <p class="onboard-note">$29/month, billed monthly. Cancel anytime.</p>
+        <p class="onboard-note">Already have an account? <a href="#" onclick="showLogin(event)">Log in</a></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ── LOGIN SCREEN ──────────────────────────────────────────────── -->
+<div class="screen" id="screen-login">
+  <div class="onboard-grid" style="padding-top:80px;">
+    <div class="onboard-section onboard-hero-section" style="margin-bottom:32px;">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 13L12 5L21 13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+            <path d="M6 13V20H18V13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+            <path d="M11 20V15H13V20" stroke="#1C1C1E" stroke-width="2.5" stroke-linecap="square"/>
+          </svg>
+        </div>
+        <div class="brand-name">TradeDesk</div>
+      </div>
+      <h1 class="onboard-title" style="font-size:clamp(28px,6vw,38px);">Welcome back</h1>
+      <p class="onboard-sub">Log in to access your proposals</p>
+    </div>
+
+    <div class="onboard-section onboard-form-section">
+      <div class="onboard-inner">
+        <div class="onboard-form">
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="john@smithroofing.com" autocomplete="email">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password">
+          </div>
+
+          <div class="form-error" id="loginError"></div>
+
+          <button class="btn-primary" id="loginBtn" onclick="doLogin()">Log In →</button>
+
+          <p class="onboard-note">Don't have an account? <a href="#" onclick="showSignup(event)">Sign up</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PAYWALL SCREEN ────────────────────────────────────────────── -->
+<div class="screen" id="screen-paywall">
+  <div class="onboard-grid" style="padding-top:80px;">
+    <div class="onboard-section onboard-hero-section" style="margin-bottom:32px;">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 13L12 5L21 13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+            <path d="M6 13V20H18V13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+            <path d="M11 20V15H13V20" stroke="#1C1C1E" stroke-width="2.5" stroke-linecap="square"/>
+          </svg>
+        </div>
+        <div class="brand-name">TradeDesk</div>
+      </div>
+      <h1 class="onboard-title">One step left.</h1>
+      <p class="onboard-sub">Subscribe to start generating proposals.</p>
+    </div>
+
+    <div class="onboard-section">
+      <div class="pricing-card">
+        <div class="pricing-name">TradeDesk Pro</div>
+        <div class="pricing-price">$29<span class="pricing-period">/month</span></div>
+        <ul class="pricing-features">
+          <li><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></svg></span> Unlimited AI-generated proposals</li>
+          <li><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></svg></span> Voice-to-proposal</li>
+          <li><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></svg></span> PDF download & email to clients</li>
+          <li><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></svg></span> Your branding on every proposal</li>
+          <li><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></svg></span> Cancel anytime</li>
+        </ul>
+        <button class="btn-primary" id="subscribeBtn" onclick="startCheckout()">Subscribe — $29/month</button>
+        <div class="form-error" id="paywallError"></div>
+      </div>
+      <p class="onboard-note" style="margin-top:20px;">
+        <a href="#" onclick="logout(event)">Sign out</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── APP SCREEN ────────────────────────────────────────────────── -->
+<div class="screen" id="screen-app">
+  <header class="app-header">
+    <div class="app-brand">
+      <div class="app-brand-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 13L12 5L21 13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+          <path d="M6 13V20H18V13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+          <path d="M11 20V15H13V20" stroke="#1C1C1E" stroke-width="2.5" stroke-linecap="square"/>
+        </svg>
+      </div>
+      <div class="app-brand-name">TradeDesk</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" id="companyBtn" onclick="showCompanyModal()"><span class="icon icon-sm" style="margin-right:5px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Settings</button>
+      <button class="btn-icon" onclick="newProposal()">+ New Proposal</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <!-- LEFT: INPUT PANEL -->
+    <div class="left-panel" id="leftPanel">
+      <div class="panel-header">
+        <div class="panel-title">Job Details</div>
+        <div class="panel-sub">Describe the job or use your voice</div>
+      </div>
+
+      <div class="panel-body">
+
+        <!-- Voice input -->
+        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">
+          <div class="voice-icon" id="voiceIcon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+              <rect x="9" y="2" width="6" height="12" rx="3"/>
+              <path d="M5 10V11C5 14.866 8.134 18 12 18C15.866 18 19 14.866 19 11V10"/>
+              <path d="M12 18V22"/>
+              <path d="M8 22H16"/>
+            </svg>
+          </div>
+          <div class="voice-text">
+            <div class="voice-label" id="voiceLabel">Tap to speak</div>
+            <div class="voice-hint" id="voiceHint">Describe the job out loud</div>
+          </div>
+        </button>
+
+        <div class="or-divider">or type it out</div>
+
+        <!-- Client info -->
+        <div class="form-group">
+          <label class="form-label">Client Name</label>
+          <input class="form-input" id="clientName" type="text" placeholder="e.g. Michael Johnson">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Client Phone</label>
+            <input class="form-input" id="clientPhone" type="tel" placeholder="(555) 000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Client Email</label>
+            <input class="form-input" id="clientEmail" type="email" placeholder="client@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Property Address</label>
+          <input class="form-input" id="jobAddress" type="text" placeholder="123 Main St, City, State">
+        </div>
+
+        <!-- Services -->
+        <div class="form-group">
+          <label class="form-label">Services Needed</label>
+          <div class="services-grid">
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M3 12L12 4L21 12"/><path d="M5 12V20H19V12"/><path d="M9 20V14H15V20"/></svg></span> Full Replacement
+              <input type="checkbox" value="Full roof replacement">
+            </label>
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><path d="M14 18L20 12M14 12L20 18"/></svg></span> Repair / Patch
+              <input type="checkbox" value="Roof repair and patching">
+            </label>
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><rect x="4" y="4" width="16" height="16"/><path d="M4 12H20M12 4V20"/></svg></span> Skylights
+              <input type="checkbox" value="Skylight installation/repair">
+            </label>
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M5 4H19L17 12H7L5 4Z"/><path d="M7 12V18C7 19 8 20 9 20H15C16 20 17 19 17 18V12"/></svg></span> Gutters
+              <input type="checkbox" value="Gutter installation/repair">
+            </label>
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 8L12 4L20 8V10L12 14L4 10V8Z"/><path d="M4 14L12 18L20 14"/></svg></span> Flashing
+              <input type="checkbox" value="Flashing repair/replacement">
+            </label>
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M2 10L12 3L22 10"/><path d="M2 10H22"/></svg></span> Drip Edge
+              <input type="checkbox" value="Drip edge installation">
+            </label>
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"><path d="M12 3L19 6V11C19 16 16 19.5 12 21C8 19.5 5 16 5 11V6L12 3Z"/></svg></span> Ice & Water Shield
+              <input type="checkbox" value="Ice and water shield installation">
+            </label>
+            <label class="service-chip">
+              <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><rect x="5" y="3" width="14" height="18"/><path d="M9 8H15M9 12H15M9 16H15"/></svg></span> Ventilation
+              <input type="checkbox" value="Attic ventilation improvement">
+            </label>
+          </div>
+        </div>
+
+        <!-- Job description -->
+        <div class="form-group">
+          <label class="form-label">Job Notes</label>
+          <textarea class="form-textarea" id="jobNotes" placeholder="e.g. 28 square ranch home, storm damage to back slope, 3 layers of old shingles to tear off, customer wants architectural shingles to match neighbors..."></textarea>
+        </div>
+
+        <!-- Size -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Roof Size (squares)</label>
+            <input class="form-input" id="roofSquares" type="number" placeholder="e.g. 28">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Shingle Type</label>
+            <select class="form-input" id="shingleType">
+              <option value="">Select type...</option>
+              <option value="3-tab asphalt">3-Tab Asphalt</option>
+              <option value="architectural asphalt">Architectural Asphalt</option>
+              <option value="impact-resistant asphalt">Impact-Resistant</option>
+              <option value="metal standing seam">Metal Standing Seam</option>
+              <option value="metal corrugated">Metal Corrugated</option>
+              <option value="wood shake">Wood Shake</option>
+              <option value="tile">Tile</option>
+              <option value="flat/TPO">Flat / TPO</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Valid Until</label>
+          <input class="form-input" id="validUntil" type="date">
+        </div>
+
+      </div>
+
+      <div class="panel-footer">
+        <button class="btn-generate" id="generateBtn" onclick="generateProposal()">
+          <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14H11L10 22L20 9H13L13 2Z"/></svg></span>
+          Generate Proposal
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: PREVIEW PANEL -->
+    <div class="right-panel">
+      <div class="preview-header">
+        <div class="preview-title">Proposal Preview</div>
+        <div class="preview-actions" id="previewActions" style="display:none;">
+          <button class="btn-action" onclick="copyProposal()"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg></span> Copy</button>
+          <button class="btn-action" onclick="emailProposal()"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6L12 13L2 6"/></svg></span> Email</button>
+          <button class="btn-action primary" onclick="downloadPDF()"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V19A2 2 0 0119 21H5A2 2 0 013 19V15"/><path d="M7 10L12 15L17 10"/><path d="M12 15V3"/></svg></span> Download PDF</button>
+        </div>
+      </div>
+
+      <div class="preview-body" id="previewBody">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 3V1H15V3"/><path d="M8 9H16M8 13H16M8 17H12"/></svg></div>
+          <div class="empty-title">Your proposal will appear here</div>
+          <div class="empty-sub">Fill in the job details on the left and hit Generate — your professional proposal will be ready in seconds.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Mobile FAB -->
+<button class="mobile-fab" id="mobileFab" onclick="toggleMobilePanel()">
+  <span class="icon icon-lg" id="mobileFabIcon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4A2 2 0 002 6V20A2 2 0 004 22H18A2 2 0 0020 20V13"/><path d="M18.5 2.5A2.121 2.121 0 0121.5 5.5L12 15L8 16L9 12L18.5 2.5Z"/></svg></span>
+</button>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="companyModal">
+  <div class="modal">
+    <div class="modal-title">Company Settings</div>
+    <div class="modal-sub">Update your business information</div>
+    <input class="modal-input" id="modalCompany" placeholder="Company Name">
+    <input class="modal-input" id="modalOwner" placeholder="Your Name">
+    <input class="modal-input" id="modalPhone" type="tel" placeholder="Phone">
+    <input class="modal-input" id="modalEmail" type="email" placeholder="Email" disabled style="opacity:0.6;cursor:not-allowed;">
+    <input class="modal-input" id="modalLicense" placeholder="License Number (optional)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <input class="modal-input" id="modalRateSquare" type="number" placeholder="$/square">
+      <input class="modal-input" id="modalRateLabor" type="number" placeholder="$/hour labor">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveSettings()" style="flex:1;">Save Settings</button>
+    </div>
+    <div style="display:flex; justify-content:center; gap:16px; margin-top:14px;">
+      <a href="terms.html" target="_blank" class="modal-reset-link" style="padding:0; width:auto;">Terms & Privacy</a>
+      <button class="modal-reset-link" onclick="resetAccount()" style="padding:0; width:auto;">Sign out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Email Modal -->
+<div class="modal-overlay" id="emailModal">
+  <div class="modal">
+    <div class="modal-title">Send Proposal</div>
+    <div class="modal-sub">Send this proposal directly to your client</div>
+    <input class="modal-input" id="emailTo" type="email" placeholder="Client email address">
+    <input class="modal-input" id="emailSubject" placeholder="Email subject">
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeEmailModal()">Cancel</button>
+      <button class="btn-primary" onclick="sendEmail()" style="flex:1;">Send Proposal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────────────
+const TRADEDESK_PROXY_URL = 'https://tradedesk-proxy.4s9dgkvrzr.workers.dev';
+
+// ── STATE ────────────────────────────────────────────────────────
+let company = {};
+let currentProposal = null;
+let isRecording = false;
+let recognition = null;
+let mobilePanelOpen = false;
+let authToken = null;
+
+// ── INIT ─────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  // Handle return from Stripe Checkout
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') === 'success') {
+    showToast('Payment successful! Activating your account...');
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  authToken = localStorage.getItem('tradedesk_token');
+
+  if (authToken) {
+    await loadCurrentUser();
+  }
+
+  // Set default valid until (30 days from now)
+  const d = new Date();
+  d.setDate(d.getDate() + 30);
+  const el = document.getElementById('validUntil');
+  if (el) el.value = d.toISOString().split('T')[0];
+
+  setupVoice();
+});
+
+// ── SCREEN HELPERS ───────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function showSignup(e) {
+  if (e) e.preventDefault();
+  showScreen('screen-onboarding');
+}
+
+function showLogin(e) {
+  if (e) e.preventDefault();
+  document.getElementById('loginError').classList.remove('show');
+  showScreen('screen-login');
+}
+
+// ── AUTH: LOAD CURRENT USER ──────────────────────────────────────
+async function loadCurrentUser() {
+  try {
+    const res = await fetch(`${TRADEDESK_PROXY_URL}/me`, {
+      headers: { 'Authorization': `Bearer ${authToken}` },
+    });
+
+    if (!res.ok) {
+      // Invalid/expired token
+      logout();
+      return;
+    }
+
+    const data = await res.json();
+    company = {
+      name: data.companyName,
+      owner: data.ownerName,
+      phone: data.phone,
+      email: data.email,
+      license: data.license,
+      rateSquare: data.rateSquare,
+      rateLabor: data.rateLabor,
+    };
+
+    if (data.subscriptionStatus === 'active') {
+      showApp();
+    } else {
+      showScreen('screen-paywall');
+    }
+  } catch (err) {
+    showToast('Connection error — please try again');
+  }
+}
+
+// ── AUTH: SIGNUP ─────────────────────────────────────────────────
+async function completeOnboarding() {
+  const companyName = document.getElementById('companyName').value.trim();
+  const ownerName   = document.getElementById('ownerName').value.trim();
+  const phone       = document.getElementById('phone').value.trim();
+  const email       = document.getElementById('email').value.trim();
+  const password    = document.getElementById('password').value;
+  const license     = document.getElementById('license').value.trim();
+  const rateSquare  = parseFloat(document.getElementById('ratePerSquare').value) || 450;
+  const rateLabor   = parseFloat(document.getElementById('rateLabor').value) || 85;
+
+  const errEl = document.getElementById('signupError');
+  errEl.classList.remove('show');
+
+  if (!companyName || !ownerName) {
+    showFormError(errEl, 'Please enter your company name and your name');
+    return;
+  }
+  if (!email) {
+    showFormError(errEl, 'Please enter your email address');
+    return;
+  }
+  if (!password || password.length < 8) {
+    showFormError(errEl, 'Password must be at least 8 characters');
+    return;
+  }
+
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating account...';
+
+  try {
+    const res = await fetch(`${TRADEDESK_PROXY_URL}/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email, password, companyName, ownerName, phone, license, rateSquare, rateLabor,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showFormError(errEl, data.error || 'Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Create Account →';
+      return;
+    }
+
+    authToken = data.token;
+    localStorage.setItem('tradedesk_token', authToken);
+
+    company = {
+      name: companyName, owner: ownerName, phone, email, license, rateSquare, rateLabor,
+    };
+
+    showScreen('screen-paywall');
+
+  } catch (err) {
+    showFormError(errEl, 'Connection error — please try again');
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
+  }
+}
+
+// ── AUTH: LOGIN ──────────────────────────────────────────────────
+async function doLogin() {
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl    = document.getElementById('loginError');
+  errEl.classList.remove('show');
+
+  if (!email || !password) {
+    showFormError(errEl, 'Please enter your email and password');
+    return;
+  }
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Logging in...';
+
+  try {
+    const res = await fetch(`${TRADEDESK_PROXY_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showFormError(errEl, data.error || 'Invalid email or password');
+      btn.disabled = false;
+      btn.textContent = 'Log In →';
+      return;
+    }
+
+    authToken = data.token;
+    localStorage.setItem('tradedesk_token', authToken);
+
+    await loadCurrentUser();
+
+  } catch (err) {
+    showFormError(errEl, 'Connection error — please try again');
+    btn.disabled = false;
+    btn.textContent = 'Log In →';
+  }
+}
+
+function showFormError(el, message) {
+  el.textContent = message;
+  el.classList.add('show');
+}
+
+// ── AUTH: LOGOUT ─────────────────────────────────────────────────
+function logout(e) {
+  if (e) e.preventDefault();
+  authToken = null;
+  company = {};
+  localStorage.removeItem('tradedesk_token');
+  showScreen('screen-onboarding');
+}
+
+// ── STRIPE CHECKOUT ──────────────────────────────────────────────
+async function startCheckout() {
+  const btn = document.getElementById('subscribeBtn');
+  const errEl = document.getElementById('paywallError');
+  errEl.classList.remove('show');
+  btn.disabled = true;
+  btn.textContent = 'Redirecting to checkout...';
+
+  try {
+    const res = await fetch(`${TRADEDESK_PROXY_URL}/create-checkout-session`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.url) {
+      showFormError(errEl, data.error || 'Could not start checkout. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Subscribe — $29/month';
+      return;
+    }
+
+    window.location.href = data.url;
+
+  } catch (err) {
+    showFormError(errEl, 'Connection error — please try again');
+    btn.disabled = false;
+    btn.textContent = 'Subscribe — $29/month';
+  }
+}
+
+function showApp() {
+  showScreen('screen-app');
+}
+
+// ── VOICE INPUT ──────────────────────────────────────────────────
+function setupVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    const btn = document.getElementById('voiceBtn');
+    if (btn) {
+      btn.style.opacity = '0.5';
+      btn.style.cursor = 'not-allowed';
+      document.getElementById('voiceLabel').textContent = 'Voice not supported';
+      document.getElementById('voiceHint').textContent = 'Your browser doesn\'t support voice input — type the job details below';
+    }
+    return;
+  }
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (e) => {
+    const transcript = Array.from(e.results)
+      .map(r => r[0].transcript)
+      .join('');
+
+    document.getElementById('voiceHint').textContent = transcript;
+
+    if (e.results[e.results.length - 1].isFinal) {
+      parseVoiceInput(transcript);
+      stopRecording();
+    }
+  };
+
+  recognition.onerror = (e) => {
+    let msg = 'Voice input error — please try again or type instead';
+    if (e.error === 'not-allowed' || e.error === 'permission-denied') {
+      msg = 'Microphone permission denied — check your browser settings';
+    } else if (e.error === 'no-speech') {
+      msg = 'No speech detected — try again';
+    } else if (e.error === 'network') {
+      msg = 'Network error — voice input needs an internet connection';
+    }
+    showToast(msg);
+    stopRecording();
+  };
+
+  recognition.onend = () => { if (isRecording) stopRecording(); };
+}
+
+const ICON_MIC = `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10V11C5 14.866 8.134 18 12 18C15.866 18 19 14.866 19 11V10"/><path d="M12 18V22"/><path d="M8 22H16"/></svg>`;
+const ICON_STOP = `<svg viewBox="0 0 24 24" fill="white" width="14" height="14"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>`;
+
+function toggleVoice() {
+  if (!recognition) { showToast('Voice not supported on this browser'); return; }
+  isRecording ? stopRecording() : startRecording();
+}
+
+function startRecording() {
+  isRecording = true;
+  document.getElementById('voiceBtn').classList.add('recording');
+  document.getElementById('voiceLabel').textContent = 'Listening... tap to stop';
+  document.getElementById('voiceHint').textContent = 'Speak clearly — describe the roofing job';
+  document.getElementById('voiceIcon').innerHTML = ICON_STOP;
+  recognition.start();
+}
+
+function stopRecording() {
+  isRecording = false;
+  document.getElementById('voiceBtn').classList.remove('recording');
+  document.getElementById('voiceLabel').textContent = 'Tap to speak';
+  document.getElementById('voiceHint').textContent = 'Describe the job out loud';
+  document.getElementById('voiceIcon').innerHTML = ICON_MIC;
+  try { recognition.stop(); } catch(e) {}
+}
+
+function parseVoiceInput(transcript) {
+  // Fill job notes with the transcript
+  const notes = document.getElementById('jobNotes');
+  if (notes) {
+    notes.value = transcript;
+  }
+
+  // Try to extract key info
+  const lower = transcript.toLowerCase();
+
+  // Extract squares
+  const squareMatch = lower.match(/(\d+)\s*square/);
+  if (squareMatch) {
+    const sq = document.getElementById('roofSquares');
+    if (sq && !sq.value) sq.value = squareMatch[1];
+  }
+
+  // Detect services
+  if (lower.includes('replace') || lower.includes('new roof')) {
+    document.querySelectorAll('.service-chip').forEach(chip => {
+      if (chip.textContent.includes('Full Replacement')) {
+        chip.querySelector('input').checked = true;
+      }
+    });
+  }
+
+  if (lower.includes('repair') || lower.includes('patch')) {
+    document.querySelectorAll('.service-chip').forEach(chip => {
+      if (chip.textContent.includes('Repair')) {
+        chip.querySelector('input').checked = true;
+      }
+    });
+  }
+
+  showToast('Voice input captured — review and generate!');
+}
+
+// ── MOBILE PANEL ─────────────────────────────────────────────────
+const ICON_EDIT  = `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4A2 2 0 002 6V20A2 2 0 004 22H18A2 2 0 0020 20V13"/><path d="M18.5 2.5A2.121 2.121 0 0121.5 5.5L12 15L8 16L9 12L18.5 2.5Z"/></svg>`;
+const ICON_CLOSE = `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></svg>`;
+
+function toggleMobilePanel() {
+  const panel = document.getElementById('leftPanel');
+  mobilePanelOpen = !mobilePanelOpen;
+  panel.classList.toggle('mobile-active', mobilePanelOpen);
+  document.getElementById('mobileFabIcon').innerHTML = mobilePanelOpen ? ICON_CLOSE : ICON_EDIT;
+}
+
+// ── NEW PROPOSAL ─────────────────────────────────────────────────
+function newProposal() {
+  document.getElementById('clientName').value = '';
+  document.getElementById('clientPhone').value = '';
+  document.getElementById('clientEmail').value = '';
+  document.getElementById('jobAddress').value = '';
+  document.getElementById('jobNotes').value = '';
+  document.getElementById('roofSquares').value = '';
+  document.getElementById('shingleType').value = '';
+
+  document.querySelectorAll('.service-chip input').forEach(inp => {
+    inp.checked = false;
+  });
+
+  document.getElementById('emptyState').style.display = '';
+  document.getElementById('previewActions').style.display = 'none';
+  currentProposal = null;
+
+  // Clear preview
+  const body = document.getElementById('previewBody');
+  body.innerHTML = `<div class="empty-state" id="emptyState">
+    <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 3V1H15V3"/><path d="M8 9H16M8 13H16M8 17H12"/></svg></div>
+    <div class="empty-title">Your proposal will appear here</div>
+    <div class="empty-sub">Fill in the job details on the left and hit Generate — your professional proposal will be ready in seconds.</div>
+  </div>`;
+
+  showToast('New proposal started');
+}
+
+// ── GENERATE PROPOSAL ────────────────────────────────────────────
+async function generateProposal() {
+  const clientName  = document.getElementById('clientName').value.trim();
+  const jobAddress  = document.getElementById('jobAddress').value.trim();
+  const jobNotes    = document.getElementById('jobNotes').value.trim();
+  const roofSquares = document.getElementById('roofSquares').value.trim();
+  const shingleType = document.getElementById('shingleType').value;
+  const validUntil  = document.getElementById('validUntil').value;
+
+  const selectedServices = Array.from(document.querySelectorAll('.service-chip input:checked'))
+    .map(inp => inp.value)
+    .filter(Boolean);
+
+  if (!clientName && !jobAddress && !jobNotes && selectedServices.length === 0) {
+    showToast('Please enter at least some job details');
+    return;
+  }
+
+  // Show generating state
+  const ICON_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 6L9 17L4 12"/></svg>`;
+  const ICON_DOT   = `<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><circle cx="12" cy="12" r="4"/></svg>`;
+
+  const previewBody = document.getElementById('previewBody');
+  previewBody.innerHTML = `
+    <div class="generating-state">
+      <div class="gen-spinner"></div>
+      <div class="gen-text">Building your proposal...</div>
+      <div class="gen-steps">
+        <div class="gen-step done"><span class="icon icon-sm">${ICON_CHECK}</span> Reading job details</div>
+        <div class="gen-step" id="step2"><span class="icon icon-sm">${ICON_DOT}</span> Calculating pricing</div>
+        <div class="gen-step" id="step3"><span class="icon icon-sm">${ICON_DOT}</span> Writing proposal</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('generateBtn').disabled = true;
+
+  // Animate steps
+  setTimeout(() => {
+    const s2 = document.getElementById('step2');
+    if (s2) { s2.classList.add('done'); s2.innerHTML = `<span class="icon icon-sm">${ICON_CHECK}</span> Calculating pricing`; }
+  }, 800);
+
+  setTimeout(() => {
+    const s3 = document.getElementById('step3');
+    if (s3) { s3.classList.add('done'); s3.innerHTML = `<span class="icon icon-sm">${ICON_CHECK}</span> Writing proposal`; }
+  }, 1600);
+
+  // Build prompt for Claude
+  const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const validDate = validUntil ? new Date(validUntil).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) : '';
+
+  const prompt = `You are a professional roofing contractor proposal writer. Generate a detailed, professional roofing proposal as JSON.
+
+CONTRACTOR INFO:
+Company: ${company.name}
+Contractor: ${company.owner}
+Phone: ${company.phone || 'N/A'}
+Email: ${company.email || 'N/A'}
+License: ${company.license || 'N/A'}
+Rate per square: $${company.rateSquare}
+Labor rate: $${company.rateLabor}/hr
+
+JOB INFO:
+Client: ${clientName || 'Homeowner'}
+Address: ${jobAddress || 'Property address TBD'}
+Roof size: ${roofSquares ? roofSquares + ' squares' : 'To be measured'}
+Shingle type: ${shingleType || 'To be selected'}
+Services requested: ${selectedServices.length > 0 ? selectedServices.join(', ') : 'General roofing work'}
+Additional notes: ${jobNotes || 'None provided'}
+Proposal date: ${today}
+Valid until: ${validDate || '30 days from today'}
+
+Generate a JSON response with this exact structure:
+{
+  "proposalNumber": "a unique proposal number like TD-2026-0847",
+  "jobTitle": "brief professional title for this specific job",
+  "clientName": "client name",
+  "clientPhone": "${document.getElementById('clientPhone').value || ''}",
+  "clientEmail": "${document.getElementById('clientEmail').value || ''}",
+  "propertyAddress": "property address",
+  "proposalDate": "${today}",
+  "validUntil": "${validDate}",
+  "intro": "2-3 sentence professional introduction paragraph specific to this job",
+  "lineItems": [
+    {
+      "description": "service name",
+      "detail": "specific detail about this line item",
+      "qty": "quantity with unit",
+      "unitPrice": number,
+      "total": number
+    }
+  ],
+  "subtotal": number,
+  "tax": number,
+  "total": number,
+  "notes": "important project notes, what's included, payment terms, timeline estimate",
+  "workmanshipWarranty": "warranty period and what it covers",
+  "materialWarranty": "manufacturer warranty info",
+  "callToAction": "a short punchy 3-6 word call to action like 'Ready To Get Started?' or 'Let's Get This Roof Done'"
+}
+
+Use the contractor's rates to calculate realistic pricing. Be specific and professional. Return ONLY valid JSON, no other text.`;
+
+  try {
+    const response = await fetch(`${TRADEDESK_PROXY_URL}/generate-proposal`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({
+        max_tokens: 3000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.status === 401) {
+      logout();
+      return;
+    }
+
+    if (response.status === 402) {
+      showScreen('screen-paywall');
+      return;
+    }
+
+    if (data.error) {
+      throw new Error(data.error.message || data.error || 'API error');
+    }
+
+    let text = data.content?.[0]?.text || '';
+
+    // Strip markdown if present
+    text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+    if (data.stop_reason === 'max_tokens') {
+      throw new Error('Response was too long and got cut off. Try a shorter job description or fewer services.');
+    }
+
+    const proposal = JSON.parse(text);
+    currentProposal = proposal;
+    renderProposal(proposal);
+    document.getElementById('previewActions').style.display = 'flex';
+    showToast('Proposal ready!');
+
+  } catch(err) {
+    previewBody.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon" style="color:var(--orange);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 21H22L12 2Z"/><path d="M12 9V13"/><path d="M12 17H12.01"/></svg></div>
+        <div class="empty-title">Generation failed</div>
+        <div class="empty-sub">Something went wrong generating this proposal. Please try again.<br><br>Error: ${err.message}</div>
+      </div>`;
+    showToast('Error generating proposal — please try again');
+  }
+
+  document.getElementById('generateBtn').disabled = false;
+
+  // Close mobile panel if open
+  if (mobilePanelOpen) toggleMobilePanel();
+}
+
+// ── RENDER PROPOSAL ──────────────────────────────────────────────
+function renderProposal(p) {
+  const fmt = (n) => '$' + Number(n || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+  const lineRows = (p.lineItems || []).map(item => `
+    <tr>
+      <td>
+        <div class="line-desc">${item.description}</div>
+        ${item.detail ? `<div class="line-note">${item.detail}</div>` : ''}
+      </td>
+      <td style="text-align:center;">${item.qty || '—'}</td>
+      <td style="text-align:right;">${fmt(item.unitPrice)}</td>
+      <td style="text-align:right;font-weight:600;">${fmt(item.total)}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('previewBody').innerHTML = `
+    <div class="proposal-doc" id="proposalDoc">
+
+      <div class="proposal-header">
+        <div class="proposal-company">
+          <div>
+            <div class="proposal-company-name">${company.name}</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:4px;">${company.license ? 'License: ' + company.license : ''}</div>
+          </div>
+          <div class="proposal-company-info">
+            ${company.phone || ''}<br>
+            ${company.email || ''}<br>
+            ${company.owner}
+          </div>
+        </div>
+
+        <div>
+          <div class="proposal-badge">ROOFING PROPOSAL</div>
+          <div class="proposal-job-title">${p.jobTitle || 'Roofing Project'}</div>
+          <div style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.45);display:flex;gap:24px;">
+            <span>Proposal #${p.proposalNumber || 'TD-001'}</span>
+            <span>Issued: ${p.proposalDate}</span>
+            ${p.validUntil ? `<span>Valid until: ${p.validUntil}</span>` : ''}
+          </div>
+        </div>
+      </div>
+
+      <div class="proposal-body">
+
+        <div class="proposal-meta">
+          <div class="proposal-meta-item">
+            <div class="proposal-meta-label">Prepared For</div>
+            <div class="proposal-meta-val">${p.clientName || 'Homeowner'}</div>
+            <div style="font-size:12px;color:#888;margin-top:2px;">${p.clientPhone || ''}</div>
+          </div>
+          <div class="proposal-meta-item">
+            <div class="proposal-meta-label">Property Address</div>
+            <div class="proposal-meta-val" style="font-size:13px;">${p.propertyAddress || '—'}</div>
+          </div>
+          <div class="proposal-meta-item">
+            <div class="proposal-meta-label">Total Investment</div>
+            <div class="proposal-meta-val" style="color:#E8630A;font-size:20px;">${fmt(p.total)}</div>
+          </div>
+        </div>
+
+        <div class="proposal-section">
+          <div class="proposal-section-title">Overview</div>
+          <p class="proposal-intro">${p.intro || ''}</p>
+        </div>
+
+        <div class="proposal-section">
+          <div class="proposal-section-title">Scope of Work & Pricing</div>
+          <table class="line-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th style="text-align:center;">Qty</th>
+                <th style="text-align:right;">Unit Price</th>
+                <th style="text-align:right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>${lineRows}</tbody>
+          </table>
+          <table class="totals-table" style="margin-top:16px;">
+            <tr>
+              <td style="color:#888;">Subtotal</td>
+              <td>${fmt(p.subtotal)}</td>
+            </tr>
+            ${p.tax ? `<tr><td style="color:#888;">Tax</td><td>${fmt(p.tax)}</td></tr>` : ''}
+            <tr class="total-row">
+              <td>Total</td>
+              <td>${fmt(p.total)}</td>
+            </tr>
+          </table>
+        </div>
+
+        ${p.notes ? `
+        <div class="proposal-section">
+          <div class="proposal-section-title">Project Notes</div>
+          <div class="proposal-notes">${p.notes}</div>
+        </div>
+        ` : ''}
+
+        <div class="proposal-section">
+          <div class="proposal-section-title">Warranty</div>
+          <div class="proposal-warranty">
+            <div class="warranty-item">
+              <div class="warranty-title" style="display:flex;align-items:center;gap:6px;"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="#E8630A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6V12C4 16.5 7.5 20.5 12 22C16.5 20.5 20 16.5 20 12V6L12 2Z"/></svg></span> Workmanship Warranty</div>
+              <div class="warranty-sub">${p.workmanshipWarranty || '5-year workmanship warranty'}</div>
+            </div>
+            <div class="warranty-item">
+              <div class="warranty-title" style="display:flex;align-items:center;gap:6px;"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="#E8630A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13"/><path d="M3 7L12 2L21 7"/><path d="M9 12H15"/></svg></span> Material Warranty</div>
+              <div class="warranty-sub">${p.materialWarranty || 'Manufacturer warranty applies'}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="proposal-footer">
+        <div class="signature-area">
+          <div class="sig-block">
+            <div class="sig-line"></div>
+            <div class="sig-label">Client Signature & Date</div>
+          </div>
+          <div class="sig-block">
+            <div class="sig-line"></div>
+            <div class="sig-label">${company.owner} — ${company.name}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proposal-cta">
+        <div class="proposal-cta-title">${p.callToAction || 'Ready to get started?'}</div>
+        <div class="proposal-cta-sub">Contact us today to schedule your project</div>
+        <div class="proposal-cta-contact" style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;">
+          ${company.phone ? `<span style="display:flex;align-items:center;gap:6px;"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V19.92C22 20.47 21.55 20.92 21 20.92C9.4 20.92 1.08 12.6 1.08 1C1.08 0.45 1.53 0 2.08 0H5.08C5.6 0 6.04 0.39 6.11 0.91C6.24 1.97 6.49 3.01 6.85 4C7.02 4.46 6.9 4.99 6.54 5.35L5.05 6.84C6.32 9.45 8.55 11.68 11.16 12.95L12.65 11.46C13.01 11.1 13.54 10.98 14 11.15C14.99 11.51 16.03 11.76 17.09 11.89C17.61 11.96 18 12.4 18 12.92V15.92C18 17 17 17 22 16.92Z"/></svg></span> ${company.phone}</span>` : ''}
+          ${company.email ? `<span style="display:flex;align-items:center;gap:6px;"><span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6L12 13L2 6"/></svg></span> ${company.email}</span>` : ''}
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+// ── DOWNLOAD PDF ─────────────────────────────────────────────────
+function downloadPDF() {
+  if (!currentProposal) return;
+
+  const doc = document.getElementById('proposalDoc');
+  if (!doc) return;
+
+  // Grab all CSS rules from the page's stylesheet so the print window
+  // gets the same proposal styling (.proposal-doc, .line-table, etc.)
+  const allStyles = Array.from(document.querySelectorAll('style'))
+    .map(s => s.textContent)
+    .join('\n');
+
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Proposal - ${currentProposal.proposalNumber}</title>
+      <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <style>${allStyles}</style>
+      <style>
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; background: white; }
+        body { font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; justify-content: center; padding: 24px; }
+        .proposal-doc { box-shadow: none; max-width: 100%; }
+        @page { margin: 0.4in; size: letter; }
+        @media print {
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0; }
+          .proposal-doc { border-radius: 0; }
+        }
+      </style>
+    </head>
+    <body>
+      ${doc.outerHTML}
+    </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+
+  // Wait for fonts + layout before triggering print
+  const triggerPrint = () => {
+    printWindow.focus();
+    printWindow.print();
+  };
+
+  if (printWindow.document.fonts && printWindow.document.fonts.ready) {
+    printWindow.document.fonts.ready.then(() => setTimeout(triggerPrint, 200));
+  } else {
+    setTimeout(triggerPrint, 600);
+  }
+
+  showToast('Opening print dialog — choose "Save as PDF"');
+}
+
+// ── EMAIL PROPOSAL ───────────────────────────────────────────────
+function emailProposal() {
+  if (!currentProposal) return;
+  const modal = document.getElementById('emailModal');
+  document.getElementById('emailTo').value = currentProposal.clientEmail || '';
+  document.getElementById('emailSubject').value = `Roofing Proposal from ${company.name} — ${currentProposal.proposalNumber}`;
+  modal.classList.add('open');
+}
+
+function closeEmailModal() {
+  document.getElementById('emailModal').classList.remove('open');
+}
+
+function sendEmail() {
+  const to      = document.getElementById('emailTo').value.trim();
+  const subject = document.getElementById('emailSubject').value.trim();
+
+  if (!to) { showToast('Please enter a client email address'); return; }
+
+  // Open mailto link
+  const body = `Dear ${currentProposal.clientName || 'Homeowner'},
+
+Please find your roofing proposal attached.
+
+Proposal Number: ${currentProposal.proposalNumber}
+Total: $${Number(currentProposal.total).toLocaleString()}
+Valid Until: ${currentProposal.validUntil}
+
+To accept this proposal, please sign and return, or reply to this email.
+
+Thank you for considering ${company.name}.
+
+${company.owner}
+${company.phone || ''}
+${company.email || ''}`;
+
+  window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  closeEmailModal();
+  showToast('Email client opened');
+}
+
+// ── COPY PROPOSAL ────────────────────────────────────────────────
+function copyProposal() {
+  if (!currentProposal) return;
+  const p = currentProposal;
+  const fmt = (n) => '$' + Number(n||0).toLocaleString('en-US', {minimumFractionDigits:2});
+
+  const text = `ROOFING PROPOSAL
+${company.name} — Proposal #${p.proposalNumber}
+${p.proposalDate}
+
+PREPARED FOR: ${p.clientName}
+PROPERTY: ${p.propertyAddress}
+
+${p.intro}
+
+SCOPE OF WORK:
+${(p.lineItems||[]).map(i => `• ${i.description} (${i.qty}) — ${fmt(i.total)}`).join('\n')}
+
+TOTAL: ${fmt(p.total)}
+
+${p.notes}
+
+Warranty: ${p.workmanshipWarranty}
+Valid Until: ${p.validUntil}
+
+${company.owner} | ${company.phone} | ${company.email}`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Proposal copied to clipboard');
+  });
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────────
+function showCompanyModal() {
+  document.getElementById('modalCompany').value  = company.name || '';
+  document.getElementById('modalOwner').value    = company.owner || '';
+  document.getElementById('modalPhone').value    = company.phone || '';
+  document.getElementById('modalEmail').value    = company.email || '';
+  document.getElementById('modalLicense').value  = company.license || '';
+  document.getElementById('modalRateSquare').value = company.rateSquare || 450;
+  document.getElementById('modalRateLabor').value  = company.rateLabor || 85;
+  document.getElementById('companyModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('companyModal').classList.remove('open');
+}
+
+async function saveSettings() {
+  const updated = {
+    companyName: document.getElementById('modalCompany').value.trim(),
+    ownerName:   document.getElementById('modalOwner').value.trim(),
+    phone:       document.getElementById('modalPhone').value.trim(),
+    license:     document.getElementById('modalLicense').value.trim(),
+    rateSquare:  parseFloat(document.getElementById('modalRateSquare').value) || 450,
+    rateLabor:   parseFloat(document.getElementById('modalRateLabor').value) || 85,
+  };
+
+  try {
+    const res = await fetch(`${TRADEDESK_PROXY_URL}/me`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(updated),
+    });
+
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) { showToast('Could not save settings — please try again'); return; }
+
+    company = {
+      ...company,
+      name: updated.companyName,
+      owner: updated.ownerName,
+      phone: updated.phone,
+      license: updated.license,
+      rateSquare: updated.rateSquare,
+      rateLabor: updated.rateLabor,
+    };
+
+    closeModal();
+    showToast('Settings saved');
+  } catch (err) {
+    showToast('Connection error — please try again');
+  }
+}
+
+function resetAccount() {
+  if (!confirm('Sign out of TradeDesk on this device?')) return;
+  closeModal();
+  logout();
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Close modals on overlay click
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
