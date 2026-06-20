@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1C1C1E">
+<title>Support — TradeDesk</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #1C1C1E;
+  --bg2:       #2C2C2E;
+  --bg3:       #3A3A3C;
+  --orange:    #E8630A;
+  --orange2:   #FF7A1F;
+  --text:      #F5F4F0;
+  --text2:     #AEAEB2;
+  --text3:     #636366;
+  --border:    rgba(255,255,255,0.08);
+  --border2:   rgba(255,255,255,0.14);
+}
+
+html { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+/* ── HEADER ─────────────────────────────────────────────────────── */
+.page-header {
+  border-bottom: 1px solid var(--border);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-icon {
+  width: 32px; height: 32px;
+  background: var(--orange);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.brand-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 17px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.back-link {
+  font-size: 13px;
+  color: var(--text2);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+
+.back-link:hover { color: var(--orange); }
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
+.page-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 100px;
+}
+
+.page-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(28px, 6vw, 40px);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.page-updated {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 40px;
+}
+
+/* ── TABS ───────────────────────────────────────────────────────── */
+.tab-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 4px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s;
+}
+
+.tab-btn.active { color: var(--text); }
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 2px;
+  background: var(--orange);
+}
+
+.tab-btn:hover { color: var(--text); }
+
+/* ── CONTENT ────────────────────────────────────────────────────── */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.section {
+  margin-bottom: 36px;
+}
+
+.section-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--orange);
+  display: inline-block;
+}
+
+.section p {
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+
+.section p:last-child { margin-bottom: 0; }
+
+.section ul {
+  list-style: none;
+  color: var(--text2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.section ul li {
+  padding-left: 20px;
+  position: relative;
+}
+
+.section ul li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 9px;
+  width: 6px; height: 6px;
+  background: var(--orange);
+  border-radius: 1px;
+}
+
+.section ol {
+  color: var(--text2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 12px 20px;
+}
+
+.section a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.section a:hover { text-decoration: underline; }
+
+.section strong { color: var(--text); }
+
+.contact-box {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-top: 8px;
+}
+
+.contact-box .section-title {
+  margin-bottom: 12px;
+  padding-bottom: 0;
+  border-bottom: none;
+  font-size: 13px;
+}
+
+.contact-email-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.contact-email-link {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  color: var(--orange2);
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+.contact-email-link:hover { text-decoration: underline; }
+
+.contact-note {
+  font-size: 13px;
+  color: var(--text3);
+  margin-top: 10px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+
+.faq-item:last-child { border-bottom: none; }
+
+.faq-q {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  font-size: 14.5px;
+}
+
+.faq-a {
+  color: var(--text2);
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .page-header { padding: 16px 20px; }
+  .page-wrap { padding: 32px 20px 80px; }
+  .tab-row { gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="https://jointradedesk.com/" class="brand">
+    <div class="brand-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 13L12 5L21 13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+        <path d="M6 13V20H18V13" stroke="#1C1C1E" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/>
+        <path d="M11 20V15H13V20" stroke="#1C1C1E" stroke-width="2.5" stroke-linecap="square"/>
+      </svg>
+    </div>
+    <div class="brand-name">TradeDesk</div>
+  </a>
+  <a href="https://jointradedesk.com/" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19L5 12L12 5"/></svg>
+    Back to app
+  </a>
+</div>
+
+<div class="page-wrap">
+  <h1 class="page-title">Support</h1>
+  <div class="page-updated">We're here to help</div>
+
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="showTab('support')">Contact &amp; FAQ</button>
+    <button class="tab-btn" onclick="showTab('refunds')">Refunds &amp; Cancellation</button>
+  </div>
+
+  <!-- ── SUPPORT / CONTACT ─────────────────────────────────────── -->
+  <div class="tab-content active" id="tab-support">
+
+    <div class="section">
+      <div class="contact-box">
+        <div class="section-title">Get in touch</div>
+        <p style="color:var(--text2); margin-bottom:14px;">Questions about your account, billing, or how TradeDesk works — reach out and we'll get back to you.</p>
+        <div class="contact-email-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF7A1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7L13.03 12.7C12.7 12.91 12.3 13.02 11.9 13.02C11.5 13.02 11.1 12.91 10.78 12.7L2 7"/></svg>
+          <a href="mailto:info@jointradedesk.com" class="contact-email-link">info@jointradedesk.com</a>
+        </div>
+        <p class="contact-note">We typically respond within 1 business day.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Frequently asked</div>
+
+      <div class="faq-item">
+        <div class="faq-q">How does the free trial work?</div>
+        <div class="faq-a">Every new account starts with a 7-day free trial of TradeDesk Pro. You'll need to enter a card to start, but you won't be charged until day 8. Cancel anytime during the trial and you won't be billed.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">How do I cancel my subscription?</div>
+        <div class="faq-a">You can cancel anytime from your Stripe billing portal, or by emailing <a href="mailto:info@jointradedesk.com">info@jointradedesk.com</a> and we'll cancel it for you. See the Refunds &amp; Cancellation tab for full details.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Is the pricing in a proposal accurate?</div>
+        <div class="faq-a">Proposals are generated using AI based on the rates and details you provide. Always review pricing, scope, and terms before sending a proposal to a client — TradeDesk is a drafting tool, not a substitute for your own judgment.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Can I use TradeDesk for trades other than roofing?</div>
+        <div class="faq-a">TradeDesk is currently built and tuned specifically for roofing contractors. If you'd like to see it expand to other trades, let us know — we're listening.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Is my data secure?</div>
+        <div class="faq-a">Yes. Passwords are securely hashed and never stored in plain text, and all traffic is encrypted. See our <a href="terms.html#privacy">Privacy Policy</a> for full details.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── REFUNDS & CANCELLATION ────────────────────────────────── -->
+  <div class="tab-content" id="tab-refunds">
+
+    <div class="section">
+      <p>This page explains how billing, cancellation, and refunds work for TradeDesk subscriptions.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Free trial</div>
+      <p>New accounts include a 7-day free trial of TradeDesk Pro. A payment method is required to start the trial, but you will not be charged during this period.</p>
+      <p>If you cancel before the trial ends, you will not be billed anything. If you take no action, your subscription automatically converts to a paid plan at $29/month starting on day 8.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Billing</div>
+      <p>After your trial, TradeDesk is billed at $29/month and renews automatically each billing cycle until canceled. Payments are processed securely through Stripe.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">How to cancel</div>
+      <p>You can cancel your subscription at any time, for any reason, in one of two ways:</p>
+      <ol>
+        <li>Email <a href="mailto:info@jointradedesk.com">info@jointradedesk.com</a> from your account email and request cancellation — we'll process it promptly and confirm by reply.</li>
+        <li>Manage your subscription directly through the billing portal linked in your Stripe receipt emails.</li>
+      </ol>
+      <p>When you cancel, you'll continue to have access through the end of your current billing period (or trial period). You will not be charged again after that.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Refunds</div>
+      <p>Because the free trial gives you a full 7 days to evaluate TradeDesk before any charge occurs, completed monthly payments are generally non-refundable.</p>
+      <p>That said, if you believe you were charged in error, were billed after a cancellation request, or have an unusual circumstance, email <a href="mailto:info@jointradedesk.com">info@jointradedesk.com</a> and we'll look into it. Refund requests are reviewed on a case-by-case basis.</p>
+    </div>
+
+    <div class="section">
+      <div class="contact-box">
+        <div class="section-title">Need help with billing?</div>
+        <div class="contact-email-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF7A1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7L13.03 12.7C12.7 12.91 12.3 13.02 11.9 13.02C11.5 13.02 11.1 12.91 10.78 12.7L2 7"/></svg>
+          <a href="mailto:info@jointradedesk.com" class="contact-email-link">info@jointradedesk.com</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    if (btn.textContent.toLowerCase().includes(tab === 'support' ? 'contact' : 'refund')) {
+      btn.classList.add('active');
+    }
+  });
+  window.scrollTo(0, 0);
+}
+
+if (window.location.hash === '#refunds') showTab('refunds');
+</script>
+
+</body>
+</html>
